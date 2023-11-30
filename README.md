@@ -1,36 +1,32 @@
 # YouTube Video Downloader
 
-This script downloads videos from YouTube based on a list of URLs provided in a 'urls.txt' file. It prioritizes downloading videos in 720p resolution, but if 720p is not available, it will try 480p. If 480p is not available either, it will download the best available resolution (360p or lower) with audio.
+## Overview
+This script allows you to download YouTube videos using the Pytube library. It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio).
 
-## Requirements
-
-* Python 3.6 or higher
-* pytube library (install using pip: `pip install pytube`)
+## Prerequisites
+- Python 3.x
+- Pytube library (`pip install pytube`)
 
 ## Usage
-
-1. Create a file named 'urls.txt' and add the URLs of the videos you want to download, one URL per line.
-
-2. Download and install the pytube library using pip:
-
-```bash
-pip install pytube
-
-python download_videos.py
-
+1. Create a text file named `urls.txt` in the same directory as the script.
+2. Add one YouTube video URL per line in the `urls.txt` file.
+3. Run the script using the command `python script_name.py` in your terminal or command prompt.
 
 ## Output
+- Downloaded videos will be stored in the 'Youtube_Videos' folder in the script's directory.
+- The script will remove successfully downloaded video URLs from the `urls.txt` file.
+- If an error occurs during the download, the script will print an error message and continue to the next video.
 
-The script will print the status of each video download to the console.
+## Note
+- If the 'Youtube_Videos' folder does not exist, the script will create it.
+- The script prioritizes downloading videos in the following resolutions: 720p, 480p, and 360p with audio.
+- If a video cannot be downloaded due to an error, the error message will be displayed, and the script will proceed to the next video.
 
-## Errors
+## Disclaimer
+This script is for educational and personal use only. Respect the intellectual property rights of the content creators and adhere to YouTube's terms of service.
 
-If any errors occur during the download process, the script will print an error message to the console.
+## Author
+Rajkishor Patra
 
 ## License
-
-This script is licensed under the MIT License.
-
-## Contributing
-
-If you would like to contribute to this script, please fork the repository and make your changes. Create a pull request to submit your changes for review.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
