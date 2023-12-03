@@ -10,9 +10,37 @@ git@github.com:imraj569/YT_Playlist_Downloader.git
 ------------------------------------------------------------------------------------
 '''
 import pytube
-import os
+import os,colorama
+from colorama import Fore,init
+init(autoreset=True)
+from time import sleep
+
+def Banner():
+    screen_clear()
+    print(Fore.CYAN+'''
+╭╮╱╱╭┳━━━━╮╭━━━╮╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╭╮
+┃╰╮╭╯┃╭╮╭╮┃╰╮╭╮┃╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱┃┃
+╰╮╰╯╭┻╯┃┃╰╯╱┃┃┃┣━━┳╮╭╮╭┳━╮┃┃╭━━┳━━┳━╯┣━━┳━╮
+╱╰╮╭╯╱╱┃┃╱╱╱┃┃┃┃╭╮┃╰╯╰╯┃╭╮┫┃┃╭╮┃╭╮┃╭╮┃┃━┫╭╯
+╱╱┃┃╱╱╱┃┃╱╱╭╯╰╯┃╰╯┣╮╭╮╭┫┃┃┃╰┫╰╯┃╭╮┃╰╯┃┃━┫┃
+╱╱╰╯╱╱╱╰╯╱╱╰━━━┻━━╯╰╯╰╯╰╯╰┻━┻━━┻╯╰┻━━┻━━┻╯
+-------------------------------------------
+Author - Rajkishor Patra
+Ig - @im.raj.569
+-------------------------------------------
+          ''')
+
+    sleep(1)
+    print(Fore.RED+"Fatching all YouTube Urls please wait a sec...")
+    
+def screen_clear():
+    if os.name == 'nt':
+        os.system("cls")
+    else:
+        os.system("clear")
 
 def download_videos():
+    Banner()
     with open('urls.txt', 'r') as f:
         urls = f.readlines()
 
@@ -37,8 +65,8 @@ def download_videos():
 
             video_size = os.path.getsize(video.default_filename)
             remaining_videos = total_videos - downloaded_videos - errors
-
-            print(f"Downloading video {downloaded_videos + 1}/{total_videos} ({remaining_videos} videos remaining) - {video.title} ({video_size} bytes)")
+            video_details = f"Downloading video {downloaded_videos + 1}/{total_videos} ({remaining_videos} videos remaining) - {video.title} ({video_size} bytes)"
+            print(Fore.GREEN+video_details)
 
             video.download()
 
@@ -60,7 +88,8 @@ def download_videos():
             downloaded_videos += 1
         except Exception as e:
             errors += 1
-            print(f"Error downloading video {downloaded_videos + 1}: {e}")
+            error_details = f"Error downloading video {downloaded_videos + 1}: {e}"
+            print(Fore.RED+error_details)
 
 if __name__ == '__main__':
     download_videos()
