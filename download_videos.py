@@ -1,3 +1,14 @@
+'''
+------------------------------------------------------------------------------------
+This script is for downloading youtube videos from a text file name urls
+you just have to past all urls you want to download in urls.txt then run the script 
+it will try to download all videos in 720p if not available in try 480p or 360p.
+------------------------------------------------------------------------------------
+⚠️Do not past youtube playlist urls 
+if you want to download youtube whole playlist use
+git@github.com:imraj569/YT_Playlist_Downloader.git 
+------------------------------------------------------------------------------------
+'''
 import pytube
 import os
 
