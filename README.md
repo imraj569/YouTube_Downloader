@@ -4,13 +4,12 @@
 This script allows you to download YouTube videos using the Pytube library. It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio).
 
 ## Prerequisites
-- Python 3.x
-- Pytube library (`pip install pytube`)
+- run `requirements.txt` file
 
 ## Usage
 1. Create a text file named `urls.txt` in the same directory as the script.
 2. Add one YouTube video URL per line in the `urls.txt` file.
-3. Run the script using the command `python script_name.py` in your terminal or command prompt.
+3. Run the script using the command `python downloader.py` in your terminal or command prompt.
 
 ## Output
 - Downloaded videos will be stored in the 'Youtube_Videos' folder in the script's directory.
