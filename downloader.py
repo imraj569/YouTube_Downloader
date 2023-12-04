@@ -1,99 +1,64 @@
-'''
-------------------------------------------------------------------------------------
-This script is for downloading youtube videos from a text file name urls
-you just have to past all urls you want to download in urls.txt then run the script 
-it will try to download all videos in 720p if not available in try 480p or 360p.
-------------------------------------------------------------------------------------
-⚠️Do not past youtube playlist urls 
-if you want to download youtube whole playlist use
-git@github.com:imraj569/YT_Playlist_Downloader.git 
-------------------------------------------------------------------------------------
-'''
 import pytube
 import os
-from colorama import Fore,init
-init(autoreset=True)
-from time import sleep
 
-def Banner():
-    screen_clear()
-    print(Fore.CYAN+'''
-╭╮╱╱╭┳━━━━╮╭━━━╮╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╭╮
-┃╰╮╭╯┃╭╮╭╮┃╰╮╭╮┃╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱┃┃
-╰╮╰╯╭┻╯┃┃╰╯╱┃┃┃┣━━┳╮╭╮╭┳━╮┃┃╭━━┳━━┳━╯┣━━┳━╮
-╱╰╮╭╯╱╱┃┃╱╱╱┃┃┃┃╭╮┃╰╯╰╯┃╭╮┫┃┃╭╮┃╭╮┃╭╮┃┃━┫╭╯
-╱╱┃┃╱╱╱┃┃╱╱╭╯╰╯┃╰╯┣╮╭╮╭┫┃┃┃╰┫╰╯┃╭╮┃╰╯┃┃━┫┃
-╱╱╰╯╱╱╱╰╯╱╱╰━━━┻━━╯╰╯╰╯╰╯╰┻━┻━━┻╯╰┻━━┻━━┻╯
--------------------------------------------
-Author - Rajkishor Patra
-Ig - @im.raj.569
--------------------------------------------
-          ''')
 
-    sleep(1)
-    print(Fore.RED+"Fatching all YouTube Urls please wait a sec...")
+# Text file path
+urls_file = "urls.txt"
 
-def screen_clear():
-    if os.name == 'nt':
-        os.system("cls")
-    else:
-        os.system("clear")
+# Download directory
+download_dir = "/data/data/com.termux/files/home/storage/downloads"
+if not os.path.exists(download_dir):
+    download_dir = os.getcwd()
 
-def download_videos():
-    Banner()
-    with open('urls.txt', 'r') as f:
-        urls = f.readlines()
+# Error log file
+error_log = "download_errors.log"
 
+# Initialize variables
+total_videos = 0
+downloaded_videos = 0
+failed_videos = 0
+
+# Read URLs from file
+with open(urls_file, "r") as f:
+    urls = [line.strip() for line in f]
     total_videos = len(urls)
-    if total_videos == 0:
-        screen_clear()
-        print(Fore.RED+"No urls available please add urls first then try agin...")
-        sleep(1)
 
-    downloaded_videos = 0
-    errors = 0
- 
-    for url in urls:
-        try:
-            yt = pytube.YouTube(url)
-            # Try to download the highest resolution video (720p)
-            video = yt.streams.get_by_resolution("720p")
+# Iterate over URLs
+for url in urls:
+    try:
+        # Get video object
+        yt = pytube.YouTube(url)
 
-            if not video:
-                # If 720p is not available, try 480p
-                video = yt.streams.get_by_resolution("480p")
+        # Check if video already exists
+        file_path = os.path.join(download_dir, yt.title + "." + yt.streams.filter(progressive=True).first().extension)
+        if os.path.exists(file_path):
+            # Resume download if partially downloaded
+            if os.path.getsize(file_path) < yt.streams.filter(progressive=True).first().filesize:
+                print(f"Resuming download: {yt.title}")
+                yt.streams.filter(progressive=True).first().download(filename=file_path, resume=True)
+            else:
+                print(f"Skipping already downloaded: {yt.title}")
+                continue
 
-            if not video:
-                # If 480p is not available, download 360p with audio
-                video = yt.streams.filter(progressive=True, file_extension="mp4").first()
+        # Try downloading 480p
+        stream = yt.streams.filter(resolution="480p").first()
 
-            video_size = os.path.getsize(video.default_filename)
-            remaining_videos = total_videos - downloaded_videos - errors
-            video_details = f"Downloading video {downloaded_videos + 1}/{total_videos} ({remaining_videos} videos remaining) - {video.title} ({video_size} bytes)"
-            print(Fore.GREEN+video_details)
+        # Fallback to 360p if 480p not available
+        if not stream:
+            stream = yt.streams.filter(resolution="360p").first()
 
-            video.download()
+        # Download video
+        print(f"Downloading: {yt.title}")
+        stream.download(filename=file_path)
 
-            # Create the 'Youtube_Videos' folder if it doesn't exist
-            if not os.path.exists('Youtube_Videos'):
-                os.makedirs('Youtube_Videos')
+        downloaded_videos += 1
+    except Exception as e:
+        # Log error
+        with open(error_log, "a") as f:
+            f.write(f"Error downloading {url}: {e}\n")
+        failed_videos += 1
+        print(f"Error downloading: {yt.title}")
 
-            # Move the downloaded video to the 'Youtube_Videos' folder
-            os.rename(video.default_filename, os.path.join('Youtube_Videos', video.default_filename))
+# Print summary
+print(f"\nDownload completed. Downloaded {downloaded_videos}/{total_videos} videos. Failed: {failed_videos}")
 
-            # Remove the downloaded URL from the 'urls.txt' file
-            with open('urls.txt', 'r') as f_in, open('temp_urls.txt', 'w') as f_out:
-                for line in f_in:
-                    if line != url:
-                        f_out.write(line)
-
-            os.rename('temp_urls.txt', 'urls.txt')
-
-            downloaded_videos += 1
-        except Exception as e:
-            errors += 1
-            error_details = f"Error downloading video {downloaded_videos + 1}: {e}"
-            print(Fore.RED+error_details)
-
-if __name__ == '__main__':
-    download_videos()
