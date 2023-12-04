@@ -1,64 +1,69 @@
-import pytube
+from pytube import YouTube
 import os
+from colorama import Fore,init
+init(autoreset=True)
+import sys
+def banner():
+    os.system("cls")
+    print(Fore.BLUE+'''
+╭╮╱╱╭┳━━━━╮╭━━━╮╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╭╮
+┃╰╮╭╯┃╭╮╭╮┃╰╮╭╮┃╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱┃┃
+╰╮╰╯╭┻╯┃┃╰╯╱┃┃┃┣━━┳╮╭╮╭┳━╮┃┃╭━━┳━━┳━╯┣━━┳━╮
+╱╰╮╭╯╱╱┃┃╱╱╱┃┃┃┃╭╮┃╰╯╰╯┃╭╮┫┃┃╭╮┃╭╮┃╭╮┃┃━┫╭╯
+╱╱┃┃╱╱╱┃┃╱╱╭╯╰╯┃╰╯┣╮╭╮╭┫┃┃┃╰┫╰╯┃╭╮┃╰╯┃┃━┫┃
+╱╱╰╯╱╱╱╰╯╱╱╰━━━┻━━╯╰╯╰╯╰╯╰┻━┻━━┻╯╰┻━━┻━━┻╯
+-------------------------------------------
+Author -Rajkishor Patra
+GitHub -imrj569
+------------------------------------------- 
+          ''')
+    print(Fore.YELLOW+'''This script is download all youtube videos in 720p 
+if not available in 720p it try 480p/360p''')
+    print(Fore.CYAN+"please wait a sec fatching all urls...")
 
+def download_video(url, output_path):
+    yt = YouTube(url)
 
-# Text file path
-urls_file = "urls.txt"
+    stream = yt.streams.filter(progressive=True, resolution="720p").filter(only_audio=False).first()
+    
+    # Try to find a 720p video with audio
+    if not stream:
+        stream = yt.streams.filter(progressive=True, resolution="480p").filter(only_audio=False).first()
 
-# Download directory
-download_dir = "/data/data/com.termux/files/home/storage/downloads"
-if not os.path.exists(download_dir):
-    download_dir = os.getcwd()
+    # If no 480p video found, try 360p
+    elif not stream:
+        stream = yt.streams.filter(progressive=True, resolution="360p").filter(only_audio=False).first()
 
-# Error log file
-error_log = "download_errors.log"
+    # Download the stream
+    if stream:
+        video_title = f"Please wait downloading-{stream.title} in {stream.resolution}"
+        print(Fore.YELLOW+video_title)
+        stream.download(output_path)
+        print(Fore.GREEN+"Download Completed✅")
+    else:
+        failed_info = f"Couldn't find video in 480p or 360p with audio."
+        print(Fore.RED+failed_info)
 
-# Initialize variables
-total_videos = 0
-downloaded_videos = 0
-failed_videos = 0
+def delete_first_line(filename):
+    with open(filename, "r+") as f:
+        lines = f.readlines()
+        f.seek(0)
+        f.truncate(0)
+        f.writelines(lines[1:])
 
-# Read URLs from file
-with open(urls_file, "r") as f:
-    urls = [line.strip() for line in f]
-    total_videos = len(urls)
+if __name__ == "__main__":
+    banner()
+    # Example usage
+    with open("urls.txt","r") as f:
+        links = f.readlines()
+        if len(links) == 0:
+            print(Fore.RED+"There is no urls available in urls.txt")
+            sys.exit()
 
-# Iterate over URLs
-for url in urls:
-    try:
-        # Get video object
-        yt = pytube.YouTube(url)
+    for link in links:
+        video_url = link.strip()
+        output_path = "videos"
+        download_video(video_url, output_path)
+        delete_first_line("urls.txt")
 
-        # Check if video already exists
-        file_path = os.path.join(download_dir, yt.title + "." + yt.streams.filter(progressive=True).first().extension)
-        if os.path.exists(file_path):
-            # Resume download if partially downloaded
-            if os.path.getsize(file_path) < yt.streams.filter(progressive=True).first().filesize:
-                print(f"Resuming download: {yt.title}")
-                yt.streams.filter(progressive=True).first().download(filename=file_path, resume=True)
-            else:
-                print(f"Skipping already downloaded: {yt.title}")
-                continue
-
-        # Try downloading 480p
-        stream = yt.streams.filter(resolution="480p").first()
-
-        # Fallback to 360p if 480p not available
-        if not stream:
-            stream = yt.streams.filter(resolution="360p").first()
-
-        # Download video
-        print(f"Downloading: {yt.title}")
-        stream.download(filename=file_path)
-
-        downloaded_videos += 1
-    except Exception as e:
-        # Log error
-        with open(error_log, "a") as f:
-            f.write(f"Error downloading {url}: {e}\n")
-        failed_videos += 1
-        print(f"Error downloading: {yt.title}")
-
-# Print summary
-print(f"\nDownload completed. Downloaded {downloaded_videos}/{total_videos} videos. Failed: {failed_videos}")
-
+    print(Fore.GREEN+"All videos downloaded✅")
