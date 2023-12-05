@@ -73,16 +73,15 @@ if __name__ == "__main__":
         if len(links) == 0:
             print(Fore.RED + "There are no urls available in urls.txt")
             sys.exit()
-
-        print(f"Total no of Videos -{len(links)}")
+        
         for link in links:
             video_url = link.strip()
-            if os.name == "nt":
-                output_path = "videos"
+            try:
+                output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
                 download_video(video_url, output_path)
                 delete_first_line("urls.txt")
-            else:
-                output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
+            except:
+                output_path = "videos"
                 download_video(video_url, output_path)
                 delete_first_line("urls.txt")
 
