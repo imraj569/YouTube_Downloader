@@ -29,10 +29,6 @@ def clear_screen():
         os.system("clear")
 
 def download_video(url, output_path):
-    global total_videos, downloaded_videos
-
-    total_videos += 1
-
     yt = YouTube(url)
 
     stream = yt.streams.filter(progressive=True, resolution="720p").filter(only_audio=False).first()
@@ -47,11 +43,17 @@ def download_video(url, output_path):
 
     # Download the stream
     if stream:
+        # Get the file size in bytes
+        file_size_bytes = stream.filesize
+        # Convert bytes to megabytes (optional)
+        file_size_mb = file_size_bytes / 1024**2
+
         video_title = f"Please wait downloading-{stream.title} in {stream.resolution}"
         print(Fore.YELLOW + video_title)
+        print(f"File size: {file_size_mb} MB")
         stream.download(output_path)
         print(Fore.GREEN + "Download Completed✅")
-        downloaded_videos += 1
+
     else:
         failed_info = f"Couldn't find video in 480p or 360p with audio."
         print(Fore.RED + failed_info)
@@ -65,22 +67,27 @@ def delete_first_line(filename):
 
 if __name__ == "__main__":
     banner()
-    try:
-        # Example usage
-        with open("urls.txt", "r") as f:
-            links = f.readlines()
+    # Example usage
+    with open("urls.txt", "r") as f:
+        links = f.readlines()
 
-        if len(links) == 0:
-            print(Fore.RED + "There are no urls available in urls.txt")
-            sys.exit()
-        
-        for link in links:
-            video_url = link.strip()
+    if len(links) == 0:
+        print(Fore.RED + "There are no urls available in urls.txt")
+        sys.exit()
+    
+    for link in links:
+        video_url = link.strip()
+        #check if the os is windows it save all videos in videos folder
+        if os.name == 'nt':
+            output_path = "videos"
+            download_video(video_url, output_path)
+            delete_first_line("urls.txt")
+        #if the os is linux/termux it save all videos in Download/YT_Downloader folder
+        else:
             output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
             download_video(video_url, output_path)
             delete_first_line("urls.txt")
-            
-        print("All Videos Downloaded✅")
 
-    except:
-        sys.exit()
+    print("All Videos Downloaded✅")
+
+
