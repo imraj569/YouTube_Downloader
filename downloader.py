@@ -76,15 +76,10 @@ if __name__ == "__main__":
         
         for link in links:
             video_url = link.strip()
-            try:
-                output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
-                download_video(video_url, output_path)
-                delete_first_line("urls.txt")
-            except:
-                output_path = "videos"
-                download_video(video_url, output_path)
-                delete_first_line("urls.txt")
-
+            output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
+            download_video(video_url, output_path)
+            delete_first_line("urls.txt")
+            
         print("All Videos Downloaded✅")
 
     except:
