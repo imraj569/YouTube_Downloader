@@ -43,14 +43,8 @@ def download_video(url, output_path):
 
     # Download the stream
     if stream:
-        # Get the file size in bytes
-        file_size_bytes = stream.filesize
-        # Convert bytes to megabytes (optional)
-        file_size_mb = file_size_bytes / 1024**2
-
         video_title = f"Please wait downloading-{stream.title} in {stream.resolution}"
         print(Fore.YELLOW + video_title)
-        print(f"File size: {file_size_mb} MB")
         stream.download(output_path)
         print(Fore.GREEN + "Download Completed✅")
 
