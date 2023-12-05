@@ -3,8 +3,8 @@ import os
 from colorama import Fore,init
 init(autoreset=True)
 import sys
+
 def banner():
-    os.system("cls")
     print(Fore.BLUE+'''
 ╭╮╱╱╭┳━━━━╮╭━━━╮╱╱╱╱╱╱╱╱╱╱╭╮╱╱╱╱╱╱╱╱╭╮
 ┃╰╮╭╯┃╭╮╭╮┃╰╮╭╮┃╱╱╱╱╱╱╱╱╱╱┃┃╱╱╱╱╱╱╱╱┃┃
@@ -21,6 +21,12 @@ GitHub -imrj569
 if not available in 720p it try 480p/360p''')
     print(Fore.CYAN+"please wait a sec fatching all urls...")
 
+def clear_screen():
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+        
 def download_video(url, output_path):
     yt = YouTube(url)
 
@@ -53,17 +59,27 @@ def delete_first_line(filename):
 
 if __name__ == "__main__":
     banner()
-    # Example usage
-    with open("urls.txt","r") as f:
-        links = f.readlines()
-        if len(links) == 0:
-            print(Fore.RED+"There is no urls available in urls.txt")
-            sys.exit()
+    try:
+        # Example usage
+        with open("urls.txt","r") as f:
+            links = f.readlines()
+            if len(links) == 0:
+                print(Fore.RED+"There is no urls available in urls.txt")
+                sys.exit()
 
-    for link in links:
-        video_url = link.strip()
-        output_path = "videos"
-        download_video(video_url, output_path)
-        delete_first_line("urls.txt")
+        for link in links:
+            video_url = link.strip()
+            if os.name == "nt":
+                output_path = "videos"
+                download_video(video_url, output_path)
+                delete_first_line("urls.txt")
+            else:
+                output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
+                download_video(video_url, output_path)
+                delete_first_line("urls.txt")
 
-    print(Fore.GREEN+"All videos downloaded✅")
+        print(Fore.GREEN+"All videos downloaded✅")
+
+    except:
+        print(Fore.RED+"There is no urls available in urls.txt")
+        sys.exit()
