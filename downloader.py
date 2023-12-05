@@ -4,8 +4,6 @@ from colorama import Fore, init
 init(autoreset=True)
 import sys
 
-total_videos = 0
-downloaded_videos = 0
 
 def banner():
     clear_screen()
@@ -76,23 +74,19 @@ if __name__ == "__main__":
             print(Fore.RED + "There are no urls available in urls.txt")
             sys.exit()
 
-        print(f"Total videos: {total_videos}")
-
+        print(f"Total no of Videos -{len(links)}")
         for link in links:
             video_url = link.strip()
-
             if os.name == "nt":
                 output_path = "videos"
+                download_video(video_url, output_path)
+                delete_first_line("urls.txt")
             else:
                 output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
+                download_video(video_url, output_path)
+                delete_first_line("urls.txt")
 
-            download_video(video_url, output_path)
-            delete_first_line("urls.txt")
-
-        print(f"Downloaded videos: {downloaded_videos}")
-
-        if downloaded_videos == total_videos:
-            print(Fore.GREEN + "All videos downloaded✅")
+        print("All Videos Downloaded✅")
 
     except:
         sys.exit()
