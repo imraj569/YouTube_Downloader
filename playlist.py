@@ -4,17 +4,18 @@ from colorama import Fore, init
 init(autoreset=True)
 from time import sleep
 
-def main():   
+def playlist_downloader():   
     clear_screen()
-    print(Fore.BLUE + "--------------------------------------------------------")
     print(Fore.MAGENTA+'''
     ╔══╗
     ╚╗╔╝
     ╔╝(¯`v´¯)
     ╚══`.¸.[YT Playlist Downloader]
     ''')
+    print("-------------------------------------------------------------------")
     print("Created by:", Fore.GREEN + "Rajkishor Patra")
-    print(Fore.GREEN+"Github-imraj569")
+    print("Github:",Fore.GREEN+"imraj569")
+    print(Fore.YELLOW+"Just past your fv youtube playlist url and its done☺️🐈")
     print("-------------------------------------------------------------------")
 
     def make_alpha_numeric(string):
@@ -74,4 +75,4 @@ def clear_screen():
         os.system("clear")
 
 if __name__ == "__main__":
-    main
+    playlist_downloader()
