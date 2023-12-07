@@ -12,11 +12,11 @@ def playlist_downloader():
     ╔╝(¯`v´¯)
     ╚══`.¸.[YT Playlist Downloader]
     ''')
-    print("-------------------------")
+    print("---------------------------------------------")
     print("Created by:", Fore.GREEN + "Rajkishor Patra")
     print("Github:",Fore.GREEN+"imraj569")
     print(Fore.YELLOW+"Just past your fv youtube playlist url and its done☺️🐈")
-    print("-------------------------")
+    print("---------------------------------------------")
 
     def make_alpha_numeric(string):
         return ''.join(char for char in string if char.isalnum())
