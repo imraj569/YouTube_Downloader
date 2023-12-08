@@ -49,8 +49,7 @@ def playlist_downloader():
     print(Fore.CYAN +"Total videos in playlist: 🎦", str(totalVideoCount))
 
     for index, video in enumerate(yt_playlist.videos, start=1):
-        clear_screen()
-        print(Fore.MAGENTA+"Downloading:-", video.title)
+        print(Fore.MAGENTA+"Downloading:-", Fore.CYAN+video.title)
 
         # Get the video stream with audio, starting from 720p and falling back
         video_stream = video.streams.filter(file_extension="mp4", resolution="720p").first()
@@ -64,7 +63,7 @@ def playlist_downloader():
         print(Fore.LIGHTGREEN_EX+"Size:", video_size // (1024 ** 2), "🗜 MB")
         video_stream.download(output_path=os.path.join(storage_path, folderName))
         print("Downloaded:", video.title, "✨ successfully!")
-        print(Fore.YELLOW+"Remaining Videos:", totalVideoCount - index)
+        print(Fore.YELLOW+"Remaining Videos:", totalVideoCount - index,"/",str(totalVideoCount))
 
     print(Fore.LIGHTBLUE_EX+ "All videos downloaded successfully! 🎉")
 
