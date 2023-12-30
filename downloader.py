@@ -1,5 +1,5 @@
-from pytube import YouTube
 import os
+from pytube import YouTube
 from colorama import Fore, init
 init(autoreset=True)
 import sys
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     
     for link in links:
         video_url = link.strip()
-        #check if the os is windows it save all videos in videos folder
-        if os.name == 'nt':
+        #check if the os is windows/macOS it save all videos in videos folder
+        if os.name == 'nt' or os.name == 'posix':
             output_path = "videos"
             download_video(video_url, output_path)
             delete_first_line("urls.txt")
