@@ -30,11 +30,32 @@ This script allows you to download YouTube videos using the Pytube library. It r
 ## ⚠️ Disclaimer
 This script is for educational and personal use only. Respect the intellectual property rights of the content creators and adhere to YouTube's terms of service.
 
+## 📝 License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ## 🖥️ Author
 Rajkishor Patra
 
-**Contributors:**
-BenoitPrmt
+## Contributors 🍉
+Thanks goes to these wonderful people ([:hugs:](https://allcontributors.org/docs/en/emoji-key)):
+<table>
+    <tbody>
+        <tr>
+        <td align="center">
+            <a href="https://github.com/imraj569">
+                <img src="https://avatars.githubusercontent.com/u/53007802?v=4" width="50px;" alt="Harsh Pandey"/>
+                <br />
+                <sub><b>Rajkishor Patra</b></sub>
+            </a>
+        </td>
+        <td align="center">
+            <a href="https://github.com/BenoitPrmt">
+                <img src="https://avatars.githubusercontent.com/u/46625877?v=4" width="50px;" alt="Harsh Pandey"/>
+                <br />
+                <sub><b>BenoitPrmt</b></sub>
+            </a>
+        </td>
+      </tr>
+    </tbody>
+</table>
 
-## 📝 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
