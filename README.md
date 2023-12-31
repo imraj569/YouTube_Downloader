@@ -1,7 +1,7 @@
 # 🎬 YouTube Video Downloader
 
 ## 🌐 Overview
-This script allows you to download YouTube videos using the Pytube library. It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio).
+This script allows you to download YouTube videos using the Pytube library. It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio)also able to download whole youtube playlist.
 
 ## ✅ Prerequisites
 - Run `pip install requirements.txt`
