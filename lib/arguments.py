@@ -1,5 +1,5 @@
-"""Module for defining the Arguments dataclass and method(s) for
-parsing and validating arguments.
+"""Module for defining the Arguments dataclass and
+the method for parsing and validating arguments.
 """
 
 from dataclasses import dataclass
@@ -9,15 +9,20 @@ from colorama import Fore
 
 @dataclass
 class Arguments:
-    """Args DTO where the attributes' values dictate the flow of the control"""
+    """Args DTO where the attributes' values dictate the flow of control"""
     channel: bool
     filter: Optional[Literal["latest", "most_viewed"]]
     search_term: str
     valid: bool
     video: bool
 
-def parse_and_validate(latest, most_viewed, search_for, search_term) -> Arguments:
-    """Validates the input arguments
+def parse_and_validate(
+    latest: Optional[bool],
+    most_viewed: Optional[bool],
+    search_for: Literal["channel", "video"],
+    search_term: str
+) -> Arguments:
+    """Validates the input arguments.
     Returns: An Arguments object
     """
     arguments = {"valid": True}
@@ -25,12 +30,14 @@ def parse_and_validate(latest, most_viewed, search_for, search_term) -> Argument
         arguments["channel"] = True
         arguments["video"] = False
         if (latest and most_viewed) or (not latest and not most_viewed):
-            print(
-                Fore.RED +
-                "Please pass ONE OF (-l, --latest, -mv, --most_viewed) " \
-                "along with the name of the YT channel to search for"
-            )
             arguments["valid"] = False
+            return Arguments(
+                channel=arguments["channel"],
+                filter=None,
+                search_term="",
+                valid=arguments["valid"],
+                video=arguments["video"],
+            )
         if latest:
             arguments["filter"] = "latest"
         else:

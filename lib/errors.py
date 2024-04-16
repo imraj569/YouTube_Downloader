@@ -1,5 +1,5 @@
 """Defining custom exceptions that get raised when either the
-query to the YouTube API fails or when the downloading fails.
+query to the YouTube API fails or when the video-download fails.
 """
 
 class DownloadError(Exception):

@@ -16,6 +16,7 @@ def _get_channel_id(channel_name: str, api_key: str) -> str:
     
     Args:
         channel_name: str -> Name of the channel to search YouTube for
+        api_key: str -> YouTube API key for authorizing the request
 
     Returns: str -> ID of the channel best matching the name
     
@@ -78,6 +79,7 @@ def get_latest_video_url(channel_name: str, api_key: str) -> str:
     
     Args:
         channel_name: str -> Name of the channel to search YouTube for
+        api_key: str -> YouTube API key for authorizing the request
 
     Returns: URL of the latest video from the given YouTube channel
     
@@ -85,7 +87,6 @@ def get_latest_video_url(channel_name: str, api_key: str) -> str:
         YouTubeAPIQueryError -> When the YouTube API query fails
     """
     channel_id = _get_channel_id(channel_name, api_key)
-    # params = _get_params_for_latest_video(channel_id)
     params_for_latest_video = {
         "channelId": channel_id,
         "key": api_key,
@@ -104,6 +105,7 @@ def get_most_viewed_video_url(channel_name: str, api_key: str) -> str:
     
     Args:
         channel_name: str -> Name of the channel to search YouTube for
+        api_key: str -> YouTube API key for authorizing the request
 
     Returns: URL of the most popular video from the given YouTube channel
     
@@ -111,7 +113,6 @@ def get_most_viewed_video_url(channel_name: str, api_key: str) -> str:
         YouTubeAPIQueryError -> When the YouTube API query fails
     """
     channel_id = _get_channel_id(channel_name, api_key)
-    # params = _get_params_for_most_viewed_video(channel_id)
     params_for_most_viewed_video = {
         "channelId": channel_id,
         "key": api_key,
@@ -127,6 +128,7 @@ def get_most_relevant_video_url(search_term: str, api_key: str) -> str:
     
     Args:
         search_term: str -> Video to search YouTube for
+        api_key: str -> YouTube API key for authorizing the request
 
     Returns: URL of the YouTube video most relevant to the search term
     

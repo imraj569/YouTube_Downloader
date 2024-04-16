@@ -18,7 +18,7 @@ parser.add_argument(
     "search_for",
     choices=["channel", "video"],
     type=str,
-    help="Choose between channel or video to search YouTube for"
+    help="Choose between 'channel' or 'video' to search YouTube for"
 )
 parser.add_argument("search_term", type=str, help="The search term")
 parser.add_argument(
@@ -44,6 +44,11 @@ args = arguments.parse_and_validate(
 )
 
 if not args.valid:
+    print(
+        Fore.RED +
+        "Please pass ONE OF (-l, --latest, -mv, --most_viewed) " \
+        "along with the name of the YT channel to search for"
+    )
     sys.exit(0)
 
 api_key = os.getenv("API_KEY")

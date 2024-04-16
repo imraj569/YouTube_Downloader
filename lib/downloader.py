@@ -47,4 +47,4 @@ def download_video(url: str, output_path: str = "videos") -> None:
     print(Fore.YELLOW + video_title)
 
     stream.download(output_path)
-    print(Fore.GREEN + "Download Completed✅")
+    print(Fore.GREEN + "Download Completed ✅")

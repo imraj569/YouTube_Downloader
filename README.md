@@ -6,13 +6,12 @@ This script allows you to download YouTube videos using the Pytube library and t
 
 The following features are supported:
 
-1. Searching for the video and downloading the one most relevant to the search.
+1. Searching for a video and downloading the one that's most relevant to the search.
 1. Passing the name of a YouTube channel and downloading:
    1. The most recently uploaded video on the channel.
    1. The most viewed video on the channel.
 
-The script
-It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio).
+The script attempts to download each video in the highest resolution possible (720p, 480p, or 360p with audio).
 
 ## ✅ Prerequisites
 
@@ -52,7 +51,7 @@ Run `python main.py channel <channel_name> --most_viewed`
 
 ## 📤 Output
 
-Downloaded videos will be stored in the 'videos' folder in the root of the project.
+By default, the downloaded videos will be stored in the 'videos' folder in the root of the project.
 
 ## 📝 Note
 
