@@ -19,6 +19,20 @@ It reads a list of YouTube video URLs from a file (`urls.txt`) and attempts to d
 - Run `python -m venv .venv` to create a virtual environment.
 - To activate the created virtual environment, run `source .venv/bin/activate`.
 - Run `pip install requirements.txt` to install the dependencies required to run the script.
+- Ensure that the `.env` file in the root of the project's directory follows the `.env.template`
+  and has a valid YouTube API Key.
+
+## 🛠️ How to Get a YouTube API Key
+
+1. Log in to the [Google Developers Console](https://console.cloud.google.com/welcome).
+1. Create a [new project](https://console.cloud.google.com/projectcreate).
+1. On the new project dashboard, click Explore & Enable APIs.
+1. In the library, navigate to YouTube Data API v3 under YouTube APIs.
+1. Enable the API.
+1. Create a credential.
+1. A screen will appear with the API key!
+
+For detailed instructions on getting a YouTube API key, [follow this tutorial with screenshots](https://blog.hubspot.com/website/how-to-get-youtube-api-key) OR [watch this 2min video](https://www.youtube.com/watch?v=yuM7KH-JLu8) 😄
 
 ## ✨ Usage
 
