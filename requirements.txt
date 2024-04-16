@@ -1,2 +1,5 @@
-pytube
 colorama
+pytest
+python-dotenv
+pytube
+requests
