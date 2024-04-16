@@ -54,11 +54,17 @@ Run `python main.py channel <channel_name> --most_viewed`
 
 Downloaded videos will be stored in the 'videos' folder in the root of the project.
 
-## 🖊️ Note
+## 📝 Note
 
 1. If the 'videos' folder does not exist, the script will create it.
 1. The script prioritizes downloading videos in the following resolutions: 720p, 480p, and 360p with audio.
 1. If a video cannot be downloaded due to an error, the error message will be displayed, and the script will gracefully exit.
+
+## 🪄 Examples of how to execute the script
+
+1. `python video "TechFTW Intro"` -> Downloads the TechFTW channel's intro video.
+1. `python channel mkbhd --latest` -> Downloads MKBHD's most recent video.
+1. `python channel mkbhd --most_viewed` -> Downloads MKBHD's most watched video.
 
 ## ⚠️ Disclaimer
 
