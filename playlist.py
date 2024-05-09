@@ -32,7 +32,8 @@ def playlist_downloader():
   |   |='
   `---'
           ''')
-    print("Take a coffe i will do all work for you ☺️🐈")
+    print(Fore.YELLOW+"Take a coffe Break ☺️🐈")
+    print("Downloading All Videos from Playlist")
     sleep(1)
     yt_playlist = Playlist(link)
 
