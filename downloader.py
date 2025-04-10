@@ -1,9 +1,15 @@
 import os
-from pytube import YouTube
-from colorama import Fore, init
-init(autoreset=True)
 import sys
+import subprocess
+from colorama import Fore, init
 
+init(autoreset=True)
+
+def clear_screen():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 def banner():
     clear_screen()
@@ -14,74 +20,89 @@ def banner():
 ╱╰╮╭╯╱╱┃┃╱╱╭╯╰╯┃╭╮┃╰╯╰╯┃╭╮┫┃┃╭╮┃╭╮┃╭╮┃┃━┫╭╯
 ╱╱┃┃╱╱╱┃┃╱╱╰━━━┻━━╯╰╯╰╯╰╯╰┻━┻━━┻╯╰┻━━┻━━┻╯
 -------------------------------------------
-Author -Rajkishor Patra
-GitHub -imrj569
-------------------------------------------- 
+Author - Rajkishor Patra
+GitHub - imrj569
+-------------------------------------------
     ''')
-    print(Fore.YELLOW + '''This script is download all youtube videos in 720p 
-if not available in 720p it try 480p/360p''')
-    print(Fore.CYAN + "Please wait a sec fetching all urls...")
+    print(Fore.YELLOW + "This script downloads a YouTube video with the following resolution preference:")
+    print(Fore.YELLOW + "720p (if available), then 480p, then 360p (all with audio).\n")
 
-def clear_screen():
-    if os.name == "nt":
-        os.system("cls")
+def get_output_path():
+    # For Windows/macOS/Linux use the "videos" folder in the current directory,
+    # For Termux adjust accordingly.
+    if os.name == "nt" or os.name == "posix":
+        path = os.path.join(os.getcwd(), "videos")
     else:
-        os.system("clear")
+        path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
+    os.makedirs(path, exist_ok=True)
+    return path
 
-def download_video(url, output_path):
-    yt = YouTube(url)
-
-    stream = yt.streams.filter(progressive=True, resolution="720p").filter(only_audio=False).first()
-
-    # Try to find a 720p video with audio
-    if not stream:
-        stream = yt.streams.filter(progressive=True, resolution="480p").filter(only_audio=False).first()
-
-    # If no 480p video found, try 360p
-    elif not stream:
-        stream = yt.streams.filter(progressive=True, resolution="360p").filter(only_audio=False).first()
-
-    # Download the stream
-    if stream:
-        video_title = f"Please wait downloading-{stream.title} in {stream.resolution}"
-        print(Fore.YELLOW + video_title)
-        stream.download(output_path)
-        print(Fore.GREEN + "Download Completed✅")
-
+def build_command(url, resolution):
+    # Build a yt-dlp command with resolution fallback.
+    # The command tries the preferred resolution stream with best audio.
+    # If not available, it falls back to a lower resolution.
+    if resolution == "720p":
+        fmt = "bestvideo[height<=720]+bestaudio/best[height<=720]"
+    elif resolution == "480p":
+        fmt = "bestvideo[height<=480]+bestaudio/best[height<=480]"
+    elif resolution == "360p":
+        fmt = "bestvideo[height<=360]+bestaudio/best[height<=360]"
     else:
-        failed_info = f"Couldn't find video in 480p or 360p with audio."
-        print(Fore.RED + failed_info)
+        fmt = "bestvideo+bestaudio/best"
+    command = [
+        "yt-dlp",
+        "--no-warnings",
+        "--quiet",
+        "--no-progress",
+        "-f", fmt,
+        "--merge-output-format", "mp4",
+        "-o", os.path.join(get_output_path(), "%(title)s.%(ext)s"),
+        url
+    ]
+    return command
 
-def delete_first_line(filename):
-    with open(filename, "r+") as f:
-        lines = f.readlines()
-        f.seek(0)
-        f.truncate(0)
-        f.writelines(lines[1:])
+def download_video(url):
+    # Try 720p first; if that fails, try 480p; then 360p.
+    for res in ["720p", "480p", "360p"]:
+        print(Fore.CYAN + f"Trying to download in {res}...")
+        cmd = build_command(url, res)
+        result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if result.returncode == 0:
+            print(Fore.GREEN + f"Download in {res} succeeded.\n")
+            return
+        else:
+            print(Fore.RED + f"Download in {res} failed; trying lower resolution...\n")
+    print(Fore.RED + "All resolution downloads failed for this URL.")
+
+def process_urls_file(file_path):
+    if not os.path.isfile(file_path):
+        print(Fore.RED + f"'{file_path}' not found.")
+        sys.exit(1)
+    with open(file_path, "r") as f:
+        links = [line.strip() for line in f if line.strip()]
+    if not links:
+        print(Fore.RED + "No URLs found in the file!")
+        sys.exit(1)
+    for url in links:
+        download_video(url)
+    print(Fore.GREEN + "All videos from the file have been downloaded.")
 
 if __name__ == "__main__":
     banner()
-    # Example usage
-    with open("urls.txt", "r") as f:
-        links = f.readlines()
+    output_path = get_output_path()
+    print(Fore.CYAN + f"Videos will be saved in: {output_path}\n")
+    print(Fore.BLUE + "Choose input option:")
+    print(Fore.GREEN + "1. Enter a single YouTube video URL")
+    print(Fore.YELLOW + "2. Read URLs from 'urls.txt'")
+    choice = input(Fore.CYAN + "Enter choice (1 or 2): ").strip()
 
-    if len(links) == 0:
-        print(Fore.RED + "There are no urls available in urls.txt")
-        sys.exit()
-    
-    for link in links:
-        video_url = link.strip()
-        #check if the os is windows/macOS it save all videos in videos folder
-        if os.name == 'nt' or os.name == 'posix':
-            output_path = "videos"
-            download_video(video_url, output_path)
-            delete_first_line("urls.txt")
-        #if the os is linux/termux it save all videos in Download/YT_Downloader folder
+    if choice == "1":
+        video_url = input(Fore.YELLOW + "\nEnter YouTube video URL: ").strip()
+        if video_url:
+            download_video(video_url)
         else:
-            output_path = "/data/data/com.termux/files/home/storage/downloads/YT_Downloader"
-            download_video(video_url, output_path)
-            delete_first_line("urls.txt")
-
-    print("All Videos Downloaded✅")
-
-
+            print(Fore.RED + "No URL provided. Exiting.")
+    elif choice == "2":
+        process_urls_file("urls.txt")
+    else:
+        print(Fore.RED + "Invalid choice. Exiting.")
