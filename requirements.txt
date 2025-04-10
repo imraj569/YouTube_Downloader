@@ -1,2 +1,2 @@
-pytube
+yt-dlp
 colorama
