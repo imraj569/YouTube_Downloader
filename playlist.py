@@ -32,7 +32,7 @@ print("---------------------------------------------")
 
 # Detect platform and set base path for downloads
 if "com.termux" in os.getenv("PREFIX", "") or "Android" in platform.platform():
-    base_path = "/sdcard/Download"
+    base_path = "/data/data/com.termux/files/home/storage/downloads/"
     is_termux = True
 else:
     uname = os.getlogin()
