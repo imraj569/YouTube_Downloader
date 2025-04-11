@@ -1,113 +1,161 @@
-# 🎬 YouTube Video & Playlist Downloader
+# 🎬 YouTube Video, Playlist & Music Downloader
 
 ## 🌐 Overview
 
-This project contains Python scripts that allow you to download YouTube videos or entire playlists using [yt-dlp](https://github.com/yt-dlp/yt-dlp) with fallback logic to ensure that every video is downloaded with audio. Videos will be downloaded in the chosen resolution with the following priorities:
+This project contains powerful Python scripts that allow you to download YouTube **videos**, **playlists**, and **music tracks** using [yt-dlp](https://github.com/yt-dlp/yt-dlp), with audio merging, resolution fallback logic, and colorful terminal UI using [colorama](https://pypi.org/project/colorama/).  
+It supports both **Windows** and **Termux (Android)**.
 
-- **High:** Best available video and audio streams (or best combined format).
-- **Medium:** 720p is preferred. If 720p with separate audio is not available, a lower‑resolution video with audio is downloaded.
-- **Low:** 360p is preferred. If not available, a lower‑resolution video with audio is downloaded.
+### 🔧 Features
 
-The scripts feature a colorful terminal UI using [colorama](https://pypi.org/project/colorama/), a clear screen function, and a custom banner displaying your GitHub information. The downloader works on both Windows and Termux (Android).
+- ✅ Download individual YouTube videos or entire playlists
+- 🎵 Download YouTube music into organized categories (e.g., LoFi, Hindi 90s)
+- 📉 Fallback resolution logic: 720p/360p preferred, gracefully falls back
+- 🎨 Beautiful CLI with colorized output
+- 📂 Auto-create folders and smart output paths
+- 📦 Works on **Windows** and **Termux (Android)**
+
+---
 
 ## ✅ Prerequisites
 
-1. Install required packages by running:
+Install Python dependencies:
 
-   ```bash
-   pip install yt-dlp colorama
-   ```
+```bash
+pip install yt-dlp colorama
+```
 
-2. On Termux (Android), ensure you install `ffmpeg` (and Python if needed):
+For **Termux** (Android), install additional tools:
 
-   ```bash
-   pkg install ffmpeg python
-   ```
+```bash
+pkg install ffmpeg python
+termux-setup-storage  # (for access to Downloads folder)
+```
 
-## ✨ Usage
+---
 
-### 🔹 Download a Playlist
+## ✨ Scripts & Usage
 
-1. Run the playlist downloader script using:
+### 🔹 `playlist.py` – Download Full YouTube Playlists
+
+1. Run the script:
 
    ```bash
    python playlist.py
    ```
 
-2. When prompted, enter the YouTube playlist URL.  
-   Then, select one of the following video quality options:
+2. Paste the playlist URL.
+3. Select quality:
+   - `1. High` – Best available video + audio
+   - `2. Medium (720p)` – Falls back if 720p not available
+   - `3. Low (360p)` – Falls back if 360p not available
 
-   - **1. High:** Downloads using the best available video & audio.
-   - **2. Medium (720p):** Prefers 720p with audio; if not available, downloads a lower resolution that includes audio.
-   - **3. Low (360p):** Prefers 360p with audio; if not available, downloads a lower resolution that includes audio.
+4. Output folder is automatically created from the playlist title:
+   - **Windows:** `~/Downloads/<Playlist Name>`
+   - **Termux:** `/Download/<Playlist Name>`
 
-3. The script will automatically fetch the playlist metadata, create a download folder (with a sanitized version of the playlist title), and download all videos with audio merged in MP4 format.
+---
 
-### 🔹 Download a List of Videos
+### 🔹 `downloader.py` – Download Multiple Videos via Text File
 
-*Note: The project also includes an individual video downloader (`downloader.py`) that uses a text file with URLs. See below for additional info.*
-
-1. Create a text file named `urls.txt` in the script's directory.
-2. Add one YouTube video URL per line.
-3. Run the script using:
+1. Create a `urls.txt` in the same folder.
+2. Add YouTube video URLs (one per line).
+3. Run the script:
 
    ```bash
    python downloader.py
    ```
 
-4. Downloaded videos are stored in the `Youtube_Videos` folder (the folder is created automatically if missing) in the project directory.
-5. Successfully downloaded video URLs are removed from `urls.txt`.  
-   If an error occurs during a download, the error message is displayed, and the script continues to the next video.
+4. Videos will be downloaded into:
+   - `Youtube_Videos/` (auto-created)
+5. Successfully downloaded URLs are removed from `urls.txt`.
 
-## 📤 Output
+---
 
-- **Playlist Downloads:**  
-  Videos are stored in a folder named after the sanitized playlist title within your Downloads folder. On Windows this defaults to your Downloads folder (e.g., `C:\Users\<YourUsername>\Downloads`), while on Termux, videos are saved in `/sdcard/Download`.
+### 🔹 `music_downloader.py` – 🎵 Music Downloader with Categories
 
-- **Video Downloads (Individual):**  
-  Downloaded videos are stored in the `Youtube_Videos` folder in the project's directory.
+1. Run the music downloader:
 
-## 🖊️ Additional Features
+   ```bash
+   python music_downloader.py
+   ```
 
-- **Clear Screen & Banner:**  
-  When a script is started, it clears the terminal screen and displays a custom banner along with your GitHub information.
+2. Paste any **YouTube or music URL** (`youtube.com`, `youtu.be`, `music.*`).
+3. Choose a category like:
+   - `Odia`, `Hindi 90s`, `Bengali`, `DJ Songs`, `LoFi`
+   - ➕ Add your own custom category!
+4. Output path:
+   - **Windows:** `~/Downloads/musics/<Category>`
+   - **Termux:** `/downloads/musics/<Category>`
 
-- **Fallback Resolution Logic:**  
-  For Medium and Low quality options, if a video in the preferred resolution is unavailable with proper audio, the script automatically falls back to a lower resolution that includes audio.
+🎧 Downloads are saved in high-quality `.mp3` format using `ffmpeg`.
+
+---
+
+## 📁 Output Summary
+
+| Script               | Output Location (Windows)                | Output Location (Termux)                                   |
+|----------------------|------------------------------------------|-------------------------------------------------------------|
+| `playlist.py`        | `Downloads/<Playlist Name>`              | `/sdcard/Download/<Playlist Name>`                          |
+| `downloader.py`      | `Youtube_Videos/`                        | `Youtube_Videos/`                                           |
+| `music_downloader.py`| `Downloads/musics/<Category>`            | `~/storage/downloads/musics/<Category>`                     |
+
+---
+
+## 🖼️ Terminal UI Preview
+
+```plaintext
+╔══════════════════════════════════════╗
+║     🎵 YouTube Music Downloader      ║
+╠══════════════════════════════════════╣
+║ GitHub: https://github.com/imraj569 ║
+╚══════════════════════════════════════╝
+
+🎶 Select a music category:
+1. Hindi 90s
+2. Bengali
+3. DJ Songs
+4. ➕ Add new category
+```
+
+---
 
 ## ⚠️ Disclaimer
 
-This project is for educational and personal use only. Please respect the intellectual property rights of content creators and ensure you adhere to YouTube's Terms of Service.
+This project is for **educational and personal use only**. Please respect copyright laws and YouTube's [Terms of Service](https://www.youtube.com/t/terms).
+
+---
 
 ## 📝 License
 
-This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
+
+---
 
 ## 🖥️ Author
 
 **Rajkishor Patra**
 
-## Contributors 🍉
+---
 
-Thanks to these wonderful contributors:
+## 🍉 Contributors
+
+Thanks to these awesome contributors:
 
 <table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/imraj569">
-          <img src="https://avatars.githubusercontent.com/u/53007802?v=4" width="50px" alt="Rajkishor Patra"/>
-          <br />
-          <sub><b>Rajkishor Patra</b></sub>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/BenoitPrmt">
-          <img src="https://avatars.githubusercontent.com/u/46625877?v=4" width="50px" alt="BenoitPrmt"/>
-          <br />
-          <sub><b>BenoitPrmt</b></sub>
-        </a>
-      </td>
-    </tr>
-  </tbody>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/imraj569">
+        <img src="https://avatars.githubusercontent.com/u/53007802?v=4" width="50px;" alt="Rajkishor"/>
+        <br />
+        <sub><b>Rajkishor Patra</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/BenoitPrmt">
+        <img src="https://avatars.githubusercontent.com/u/46625877?v=4" width="50px;" alt="Benoit"/>
+        <br />
+        <sub><b>BenoitPrmt</b></sub>
+      </a>
+    </td>
+  </tr>
 </table>
